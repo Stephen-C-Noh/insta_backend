@@ -1,0 +1,28 @@
+{% extends "accounts/layout.html" %}
+
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/login.css' %}">
+{% endblock %}
+
+{% block content %}
+<div id="main_container">
+    <div class="form_container">
+        <div class="form">
+            <h1 class="sprite_insta_big_logo title">Log-in Failed.</h1>
+            <p>
+                If you do not have an ID yet, You are welcome to sign up!
+            </p>
+                <input type="submit" id="submit_btn" value="Login" class="submit_btn">
+            
+        </div>
+
+        <div class="bottom_box">
+            <div>
+                <span>Don't you have an ID yet?</span><a href="{% url 'accounts:signup' %}">Sign up</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
