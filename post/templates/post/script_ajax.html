@@ -28,7 +28,7 @@
                     likeCount.innerHTML = response.like_count + ' Likes'
                 },
                 error: function(request, status, error){
-                    alert("code:"+request.status+"\n"+"message:"request.responseText+"\n"+"error:"+error);
+                    alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
                 },
             });
         }else if(elem.matches('[data-name="bookmark]')){
@@ -46,7 +46,7 @@
                     bookmarkCount.innerHTML = response.bookmark_count + ' Bookmarks'
                 },
                 error: function(request, status, error){
-                    alert("code:"+request.status+"\n"+"message:"request.responseText+"\n"+"error:"+error);
+                    alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
                 },
             });
         }
