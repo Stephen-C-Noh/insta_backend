@@ -3,11 +3,39 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>InstaClone</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0,
+                   maximum-scale=1.0, minimum-scale=1.0">
     
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    
+        <!-- Facebook Meta Tags  -->
+    <meta property="og:url" content="https://instaclone-xpdnf.run-us-west2.goorm.io">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="instagram">
+    <meta property="og:description" content="instagram clone">
+    <meta property="og:image" content="https://instaclone-xpdnf.run-us-west2.goorm.io/imgs/instagram.jpeg">
+    
+    <!-- Twitter Meta Tags -->
+    <meta name="twitter:card" content="instagram clone">
+    <meta name="twitter:title" content="instagram">
+    <meta name="twitter:description" content="instagram clone">
+    <meta name="twitter:image" content="https://instaclone-xpdnf.run-us-west2.goorm.io/imgs/instagram.jpeg">
+
+    <!-- Google / Search Engine Tags -->
+    <meta itemprop="name" content="instagram">
+    <meta itemprop="description" content="instagram clone">
+    <meta itemprop="image" content="https://instaclone-xpdnf.run-us-west2.goorm.io/imgs/instagram.jpeg">
+
+
+    <title>instaClone</title>
     <link rel="stylesheet" href="{% static 'css/reset.css' %}">
     <link rel="stylesheet" href="{% static 'css/common.css' %}">
     <link rel="shortcut icon" href="{% static 'imgs/instagram.png' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    
     
     {% block head %}
     {% endblock %}
@@ -18,23 +46,41 @@
         <header id = "header">
             <section class="h_inner">
                 <h1 class="logo">
-                    <div class="sprite_insta_icon"></div>
-                    <div>
-                        <div class="sprite_write_logo"></div>
-                    </div>
+                    <a href="{% url 'post:post_list' %}">
+                        <div class="sprite_insta_icon"></div>
+                        <div>
+                            <div class="sprite_write_logo"></div>
+                        </div>
+                    </a>
                 </h1>
-                <div class="search_box">
-                    <input type="text" placeholder="Search" tabindex="0" id="search_field">
+                
+                <div class="search_field">
+                    <input type="text" placeholder="Search" tabindex="0">
                     <div class="fake_field">
                         <span class="sprite_small_search_icon"></span>
                         <span>Search</span>
                     </div>
                 </div>
                 <div class="right_icons">
-                    <div class="sprite_camera_icon"><a href="#"></a></div>
+                    <div class="sprite_camera_icon">
+                        <a href="#"></a>
+                    </div>
                     <div class="sprite_compass_icon"><a href="#"></a></div>
                     <div class="sprite_heart_icon_outline"><a href="#"></a></div>
-                    <div class="sprite_user_icon_outline"><a href="#"></a></div>
+                    
+                    {% if user.is_authenticated %}
+                    
+                    <div class="sprite_user_icon_outline">
+                        <a href="#"></a>
+                    </div>
+                    
+                    {% else %}
+                    
+                    <div class="sprite_user_icon_outline">
+                        <a href="{% url 'accounts:login' %}"></a>
+                    </div>
+                    
+                    {% endif %}
                 </div>
             </section>
         </header>
@@ -43,5 +89,12 @@
         {% endblock %}
         
     </section>
+
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    
+    {% block js %}
+    {% endblock %}
+    
 </body>
 </html>

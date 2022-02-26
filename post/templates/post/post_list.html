@@ -1,0 +1,162 @@
+{% extends "post/layout.html" %}
+{% load static %}
+
+{% block head %}
+{% endblock %}
+
+{% block content %}
+    <section id="main_container">
+        <div class="inner">
+          <div class="contents_box">
+            {% for post in posts %}
+            <article class="contents">
+              <header class="top">
+                <div class="user_container">
+                  <div class="profile_img">
+                      
+                      <!-- if there is a profile picture -->
+                      {% if post.author.profile.picture %}
+                      <img src="{{ post.author.profile.picture.url }}" alt="profile_image">
+                      
+                      <!-- if there is NOT -->
+                      {% else %}
+                      <img src="{% static 'imgs/thumb.jpeg'%}" alt="profile_image">
+                      {% endif %}
+                  </div>
+                  <div class="user_name">
+                    <div class="nick_name m_text">{{ post.author.profile.nickname }} {{ post.id }}</div>
+                    <div class="country s_text">Toronto, Ontario</div>
+                  </div>
+                    <div>
+                        <form action="{% url 'post:post_delete' post.pk %}" method='post'>
+                            {% csrf_token %}
+                            <input type="submit" value="Delete">
+                        </form>
+                    </div>
+                </div>
+                <div class="sprite_more_icon" data-name="more">
+                  <ul class='toggle_box'>
+                    <li><input type="submit" class="follow" value="Follow" data-name="follow"></li>
+                    <li>Edit</li>
+                    <li>Delete</li>
+                  </ul>
+                </div>
+              </header>
+
+              <div class="img_section">
+                <div class="trans_inner">
+                  <div>
+                    <img src="{{ post.photo.url }}" alt="visual01">
+                  </div>
+                </div>
+              </div>
+
+              <div class="bottom_icons">
+                <div class="left_icons">
+                  <div class="heart_btn">
+                    {% if user in post.like_user_set.all %}
+                    <div class="sprite_heart_icon_outline on" name="{{ post.id }}" data-name="heartbeat"></div>
+                    {% else %}
+                    <div class="sprite_heart_icon_outline" name="{{ post.id }}" data-name="heartbeat"></div>
+                    {% endif %}
+                  </div>
+                  <div class="sprite_bubble_icon"></div>
+                  <div class="sprite_share_icon" data-name="share"></div>
+                </div>
+                <div class="right_icon">
+                    {% if user in post.bookmark_user_set.all %}
+                    <div class="sprite_bookmark_outline on" name="{{ post.id }}" data-name="bookmark"></div>
+                    {% else %}
+                    <div class="sprite_bookmark_outline" name="{{ post.id }}" data-name="bookmark"></div>
+                    {% endif %}
+                </div>
+              </div>
+
+              <div class="likes m_text">
+                <span id="like-count-{{ post.id }}">{{ post.like_count}} Likes</span>
+                <span id="bookmark-count-{{ post.id }}">{{ post.bookmark_count}} Bookmarks</span>
+              </div>
+
+              <div class="comment_container">
+                <div class="comment" id="comment-list-ajax-post37">
+                  <div class="comment-detail">
+                    <div class="nick_name m_text">stephen.c.noh</div>
+                    <div>Your puppy is so adorable :)</div>
+                  </div>
+                </div>
+                <div class="small_heart">
+                  <div class="sprite_small_heart_icon_outline"></div>
+                </div>
+              </div>
+
+              <div class="timer">{{ post.updated_at | timesince}} ago</div>
+
+              <div class="comment_field" id="add-comment-post37">
+                <input type="text" placeholder="Add a comment...">
+                <div class="upload_btn m_text" data-name="comment">Post</div>
+              </div>
+            </article>
+              {% endfor %}
+          </div>
+
+          <input type="hidden" id="page" value="1">
+
+          <div class="side_box">
+            <div class="user_profile">
+              <div class="profile_thumb">
+                  {% if user_profile and user_profile.picture %}
+                  <img src="{{ user_profile.picture.url }}" alt="profile_picture">
+                  {% else %}
+                  <img src="{% static 'imgs/thumb.jpeg'%}" alt="profile_picture">
+                  {% endif %}
+              </div>
+              <div class="detail">
+                  {% if user_profile %}
+                  <div class="id m_text">{{ user_profile.user }}</div>
+                  <div class="en_name">{{ user_profile.nickname }}</div>
+                  {% endif %}
+              </div>
+            </div>
+
+            <article class="story">
+              <header story="story_header">
+                <div>Stories</div>
+                <div class="more">See All</div>
+              </header>
+
+              <div class="scroll_inner">
+                <div class="thumb_user">
+                  <!--repeat the section marked with ** -->
+                  <div class="profile_thumb">
+                    <img src="imgs/thumb02.jpg" alt="profile_picture">
+                  </div>
+
+                  <div class="detail">
+                    <div class="id">AmCass</div>
+                    <div class="time">2 hours ago</div>
+                  </div>
+                  <!--**-->
+                </div>
+              </div>
+            </article>
+
+            <article class="recommend">
+              <header class="reco_header">
+                <div>Suggestions For You</div>
+                <div class="more">See All</div>
+            </header>
+            <div class="thumb_user">
+                <div class="profile_thumb">
+                    <img src="img/thumb02.jpg" alt="profile_picture">
+                </div>
+                <div class="detail">
+                    <div class="id">NJ2753</div>
+                    <div class="time">1 hour ago</div>
+                </div>
+            </div>
+        </article>
+    </div>
+</div>
+</section>
+{% include "post/script_ajax.html" %}
+{% endblock %}

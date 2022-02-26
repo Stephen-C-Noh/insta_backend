@@ -1,0 +1,58 @@
+<script type="text/javascript">
+(function(){
+    const delegation = document.querySelector('.content_box');
+    function delegationFunc(e){
+        let elem = e.target;
+        console.log(elem);
+        while(!elem.getAttribute('data-name')){
+            elem = elem.parentNode;
+            if(elem.nodeName ==='BODY'){
+                elem = null;
+                return;
+            }
+        }
+        
+        if(elem.matches('[data-name="heartbeat"]')){
+            console.log("Heart!");
+            var pk = elem.getAttribute('name');
+            console.log(pk);
+            
+            $.ajax({
+                type: "POST",
+                url: "{% url 'post:post_like' %}",
+                data: {'pk':pk, 'csrfmiddlewaretoken': '{{ csrf_token }}' },
+                dataType:"json",
+                success: function(response){
+                    alert('Success!!')
+                    var likeCount = document.querySelector('#like-count-'+pk);
+                    likeCount.innerHTML = response.like_count + ' Likes'
+                },
+                error: function(request, status, error){
+                    alert("code:"+request.status+"\n"+"message:"request.responseText+"\n"+"error:"+error);
+                },
+            });
+        }else if(elem.matches('[data-name="bookmark]')){
+            console.log('Bookmarked...');
+            var pk = elem.getAttribute('name');
+            console.log(pk);
+            
+            $.ajax({
+                type: "POST",
+                url: "{% url 'post:post_bookmark' %}",
+                data: {'pk': pk, 'csrfmiddlewaretoken': '{{ csrf_token }}' },
+                dataType: "json",
+                success: function(response){
+                    var bookmarkCount = document.querySelector('#bookmark-count-'+pk);
+                    bookmarkCount.innerHTML = response.bookmark_count + ' Bookmarks'
+                },
+                error: function(request, status, error){
+                    alert("code:"+request.status+"\n"+"message:"request.responseText+"\n"+"error:"+error);
+                },
+            });
+        }
+        elem.classList.toggle('on');
+    }
+    delegation.addEventListener('click',delegationFunc);
+})()
+
+</script>

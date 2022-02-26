@@ -4,6 +4,7 @@ from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFill
 # Create your models here.
 
+
 def user_path(instance, filename):
     from random import choice
     import string
@@ -13,6 +14,7 @@ def user_path(instance, filename):
     extension = filename.split('.')[-1]
     
     return 'accounts/{}/{}.{}'.format(instance.user.username, pid, extension)
+
 
 class Profile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -33,6 +35,7 @@ class Profile(models.Model):
                                  processors=[ResizeToFill(150, 150)],
                                  format='JPEG', options={'quality': 90},
                                  blank=True)
+    
     
     def __str__(self):
         return self.nickname
