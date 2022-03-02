@@ -28,7 +28,7 @@
                     <div class="country s_text">Toronto, Ontario</div>
                   </div>
                     <div>
-                        <form action="{% url 'post:post_delete' post.pk %}" method='post'>
+                        <form action="{% url 'post:post_delete' post.pk %}" method="post">
                             {% csrf_token %}
                             <input type="submit" value="Delete">
                         </form>
@@ -78,11 +78,16 @@
               </div>
 
               <div class="comment_container">
-                <div class="comment" id="comment-list-ajax-post37">
-                  <div class="comment-detail">
-                    <div class="nick_name m_text">stephen.c.noh</div>
-                    <div>Your puppy is so adorable :)</div>
-                  </div>
+                <div class="comment" id="comment-list-ajax-post{{post.id}}">
+                  {% for comment in post.comment_set.all %}
+                    <div class="comment-detail" id="comment{{ comment.id}}">
+                        <div class="nick_name m_text">{{ comment.author.profile.nickname}}</div>
+                        <div>{{ comment.content }}</div>
+                        {% if user == comment.author %}
+                            <input type="button" class="del-comment" data-name="comment-delete" value="Delete" name="{{ comment.id }}">
+                        {% endif %}
+                    </div>
+                  {% endfor%}
                 </div>
                 <div class="small_heart">
                   <div class="sprite_small_heart_icon_outline"></div>
@@ -128,7 +133,7 @@
                 <div class="thumb_user">
                   <!--repeat the section marked with ** -->
                   <div class="profile_thumb">
-                    <img src="imgs/thumb02.jpg" alt="profile_picture">
+                    <img src="instaclone/instaclone/config/static/imgs/thumb02.jpg" alt="profile_picture">
                   </div>
 
                   <div class="detail">
@@ -147,7 +152,7 @@
             </header>
             <div class="thumb_user">
                 <div class="profile_thumb">
-                    <img src="img/thumb02.jpg" alt="profile_picture">
+                    <img src="imgs/thumb02.jpg" alt="profile_picture">
                 </div>
                 <div class="detail">
                     <div class="id">NJ2753</div>

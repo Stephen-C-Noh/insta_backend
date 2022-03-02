@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
-from .models import Post
+from .models import Post, Comment
 from .forms import PostForm
 from django.contrib import messages
 import json
@@ -116,3 +116,6 @@ def post_bookmark(request):
 
     return HttpResponse(json.dumps(context), content_type="application/json")    
 
+
+@login_required
+def comment_new(request):

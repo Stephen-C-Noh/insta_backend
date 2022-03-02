@@ -1,6 +1,6 @@
 <script type="text/javascript">
 (function(){
-    const delegation = document.querySelector('.content_box');
+    const delegation = document.querySelector('.contents_box');
     function delegationFunc(e){
         let elem = e.target;
         console.log(elem);
@@ -51,8 +51,8 @@
             });
         }
         elem.classList.toggle('on');
-    }
-    delegation.addEventListener('click',delegationFunc);
-})()
-
+    }    
+    delegation.addEventListener('click', delegationFunc);
+    
+})();
 </script>
