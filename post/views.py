@@ -150,4 +150,23 @@ def comment_new_detail(request):
             comment.save()
             return render(request, 'post/comment_new_ajax.html', {'comment': comment,})
     return redirect("post:post_list")
+
+
+
+@login_required
+def comment_delete(request):
+    pk = request.POST.get('pk')
+    comment = get_object_or_404(Comment, pk=pk)
+    if request.method == 'POST' and request.user == comment.author:
+        comment.delete()
+        message = 'Deleted.'
+        status = 1
+    
+    else:
+        message = 'Access Denied.'
+        status = 0
+        
+    return HttpResponse(json.dumps({'message': message, 'status': status, }), content_type="application/json")
+
+
     

@@ -5,6 +5,12 @@ from .models import Profile
 from django.contrib.auth.models import User
 
 
+class LoginForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ["username", "password"]
+
+
 class SignupForm(UserCreationForm):
     username = forms.CharField(label='ID for Login', widget=forms.TextInput(attrs={
         'pattern': '[a-zA-Z0-9]+',

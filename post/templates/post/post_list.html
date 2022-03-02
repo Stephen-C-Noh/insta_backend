@@ -36,9 +36,22 @@
                 </div>
                 <div class="sprite_more_icon" data-name="more">
                   <ul class='toggle_box'>
-                    <li><input type="submit" class="follow" value="Follow" data-name="follow"></li>
-                    <li>Edit</li>
-                    <li>Delete</li>
+                    <li>
+                        {% if user.profile in post.author.profile.get_follower %}
+                        <input type="submit" class="follow" value="Following" data-name="follow" name="{{ post.author.profile.id }}">
+                        {% else %}
+                        <input type="submit" class="follow" value="Follow" data-name="follow" name="{{ post.author.profile.id }}">
+                        {% endif %}
+                    </li>
+                    
+                    {% if post.author == user %}
+                    <li><a class="post_edit" href="{% url 'post:post_edit' post.pk %}">Edit</a></li>
+                    <li>
+                        <form class="post-delete-from" action="{% url 'post:post_delete' post.pk %}" method="post">
+                            {% csrf_token %}
+                            <input type="submit" class="post-delete" value="Delete">
+                        </form>
+                    </li>
                   </ul>
                 </div>
               </header>
@@ -78,27 +91,30 @@
               </div>
 
               <div class="comment_container">
-                <div class="comment" id="comment-list-ajax-post{{post.id}}">
-                  {% for comment in post.comment_set.all %}
-                    <div class="comment-detail" id="comment{{ comment.id}}">
-                        <div class="nick_name m_text">{{ comment.author.profile.nickname}}</div>
-                        <div>{{ comment.content }}</div>
-                        {% if user == comment.author %}
-                            <input type="button" class="del-comment" data-name="comment-delete" value="Delete" name="{{ comment.id }}">
-                        {% endif %}
+                        <div class="comment" id="comment-list-ajax-post{{post.id}}">
+                            {% for comment in post.comment_set.all %}
+                            <div class="comment-detail" id="comment{{ comment.id }}">
+                                <div class="nick_name m_text">{{ comment.author.profile.nickname}}</div>
+                                <div>{{comment.content}}</div>
+                                {% if user == comment.author %}
+    <input type="button" class="del-comment" data-name="comment_delete" value="삭제" name="{{ comment.id }}">
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                            
+                        </div>
                     </div>
-                  {% endfor%}
-                </div>
-                <div class="small_heart">
-                  <div class="sprite_small_heart_icon_outline"></div>
-                </div>
-              </div>
 
               <div class="timer">{{ post.updated_at | timesince}} ago</div>
 
               <div class="comment_field" id="add-comment-post{{ post.id }}">
-                <input type="text" placeholder="Add a comment...">
-                <div class="upload_btn m_text" data-name="comment">Post</div>
+                  {% if user.is_authenticated %}
+                  {{ comment_form }}
+                  <div class="upload_btn m_text" name="{{post.id}}" data-name="comment">Post</div>
+                  {% else %}
+                  {{ comment_form }}
+                  <div class="upload_btn m_text" name="{{post.id}}" data-name="comment" onclick="alert('You need to log in to leave a comment.')">Post</div>
+                  {% endif %}
               </div>
             </article>
               {% endfor %}

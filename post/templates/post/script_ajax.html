@@ -49,7 +49,7 @@
                     alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
                 },
             });
-        }else if (elem.matches('[data-name=comment"]')){
+        }else if (elem.matches('[data-name="comment"]')){
             console.log('New Comment!')
             let pk = elem.getAttribute('name');
             let content = document.querySelector('#add-comment-post'+pk+'>input[type=text]').value;
@@ -100,6 +100,27 @@
                     alert("code:"+request.status+"\nMessage:"+request.responseText+"\nError:"+error);
                 }
             });
+        }else if(elem.matches('[data-name="follow"]')){
+            let pk = elem.getAttribute('name');
+            
+            $.ajax({
+                type: "POST",
+                url: "{% url 'accounts:follow' %}",
+                data: {
+                'pk': pk,
+                'csrfmiddlewaretoken': '{{ csrf_token}}',
+                },
+                dataType: "json",
+                success: function(response){
+                    if(response.status){
+                        document.querySelector('input.follow[name=\''+pk+'\']').value="Following";
+                    }else{
+                        document.querySelector('input.follow[name=\''+pk+'\']').value="Follow";
+                    }
+                },
+                error: function(request, status, error){
+                    alert("code:"+request.status+"\nMessage:"+request.responseText+"\nError:"+error);
+            })
         }
         elem.classList.toggle('on');
     }    
