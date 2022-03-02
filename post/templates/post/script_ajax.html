@@ -49,6 +49,57 @@
                     alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
                 },
             });
+        }else if (elem.matches('[data-name=comment"]')){
+            console.log('New Comment!')
+            let pk = elem.getAttribute('name');
+            let content = document.querySelector('#add-comment-post'+pk+'>input[type=text]').value;
+            console.log(content)
+            
+            if(content.length > 140){
+                alert("Comment can be up to 140 charactors. You have input "+content.length+"/140.");
+                return;
+            }
+            
+            if(content.length == 0){
+                alert("Please write your comment. You have input "+content.length+"/140.");
+                return;
+            }
+            
+            $.ajax({
+                type: "POST",
+                url: "{% url 'post:comment_new' %}",
+                data: {
+                    'pk': pk,
+                    'content': content,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}',
+                },
+                dataType: "html",
+                success: function(data, textStatus, jqXHR){
+                    document.querySelector("#comment-list-ajax-post"+pk).insertAdjacentHTML("afterbegin", data);
+                },
+                error: function(request, status, error){
+                    alert("code:"+request.status+"\nMessage:"+request.responseText+"\nError:"+error);
+                },
+            });
+        }else if(elem.matches('[data-name="comment_delete"]')){
+            let pk = elem.getAttribute('name');
+            $.ajax({
+                type:"POST",
+                url: "{% url 'post:comment_delete' %}",
+                data: {
+                    'pk': pk,
+                    'csrfmiddlewaretoken': '{{ csrf_token}}',
+                },
+                dataType: "json",
+                success: function(response){
+                    if(response.status){
+                        document.querySelector('#comment'+pk).remove();
+                    }
+                },
+                error: function(request, status, error){
+                    alert("code:"+request.status+"\nMessage:"+request.responseText+"\nError:"+error);
+                }
+            });
         }
         elem.classList.toggle('on');
     }    
