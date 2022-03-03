@@ -7,6 +7,7 @@ from django.contrib import messages
 import json
 from django.views.decorators.http import require_POST
 from django.http import HttpResponse
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from .forms import PostForm, CommentForm
 
 
@@ -14,15 +15,33 @@ from .forms import PostForm, CommentForm
 def post_list(request, tag=None):
     posts = Post.objects.all()
     comment_form = CommentForm()
+    paginator = Paginator(post_list, 3)
+    page_num = request.POST.get('page')
     
+    try:
+        posts = paginator.page(page_num)
+    except PageNotAnInteger: # if page parameter is not an integer:
+        posts = paginator.page(1)
+    except EmptyPage:
+        posts = paginator.page(paginator.num_pages)
+    
+    if request.is_ajax():
+        return render(request, 'post/post_list_ajax.html',{
+            'posts': posts,
+            'comment_form': comment_form,
+        })
     
     if request.user.is_authenticated:
         username = request.user
         user = get_object_or_404(get_user_model(), username=username)
         user_profile = user.profile
+        following_set = request.user.profile.get_following
+        following_post_list = Post.objects.filter(author__profile__in=following_set)
+        
         return render(request, 'post/post_list.html', {
             'user_profile': user_profile,
             'posts': posts,
+            'following_post_list': following_post_list,
             'comment_form': comment_form,
         })
     else:

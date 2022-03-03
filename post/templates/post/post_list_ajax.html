@@ -1,0 +1,148 @@
+{% load static %} 
+
+{% for post in posts %}
+<article class="contents">
+    <header class="top">
+        <div class="user_container">
+            <div class="profile_img">
+                <!-- if there is a profile picture -->
+                {% if post.author.profile.picture %}
+                <img src="{{ post.author.profile.picture.url }}" alt="profile_image" />
+
+                <!-- if there is NOT -->
+                {% else %}
+                <img src="{% static 'imgs/thumb.jpeg'%}" alt="profile_image" />
+                {% endif %}
+            </div>
+            <div class="user_name">
+                <div class="nick_name m_text">{{ post.author.profile.nickname }} {{ post.id }}</div>
+                <div class="country s_text">Toronto, Ontario</div>
+            </div>
+            <div>
+                <form action="{% url 'post:post_delete' post.pk %}" method="post">
+                    {% csrf_token %}
+                    <input type="submit" value="Delete" />
+                </form>
+            </div>
+        </div>
+        
+        <div class="sprite_more_icon" data-name="more">
+            <ul class="toggle_box">
+                <li>
+                    {% if user.profile in post.author.profile.get_follower %}
+                    <input
+                        type="submit"
+                        class="follow"
+                        value="Following"
+                        data-name="follow"
+                        name="{{ post.author.profile.id }}"
+                    />
+                    {% else %}
+                    <input
+                        type="submit"
+                        class="follow"
+                        value="Follow"
+                        data-name="follow"
+                        name="{{ post.author.profile.id }}"
+                    />
+                    {% endif %}
+                </li>
+
+                {% if post.author == user %}
+                <li><a class="post_edit" href="{% url 'post:post_edit' post.pk %}">Edit</a></li>
+                <li>
+                    <form
+                        class="post-delete-from"
+                        action="{% url 'post:post_delete' post.pk %}"
+                        method="post"
+                    >
+                        {% csrf_token %}
+                        <input type="submit" class="post-delete" value="Delete" />
+                    </form>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </header>
+
+    <div class="img_section">
+        <div class="trans_inner">
+            <div>
+                <img src="{{ post.photo.url }}" alt="visual01" />
+            </div>
+        </div>
+    </div>
+
+    <div class="bottom_icons">
+        <div class="left_icons">
+            <div class="heart_btn">
+                {% if user in post.like_user_set.all %}
+                <div
+                    class="sprite_heart_icon_outline on"
+                    name="{{ post.id }}"
+                    data-name="heartbeat"
+                ></div>
+                {% else %}
+                <div
+                    class="sprite_heart_icon_outline"
+                    name="{{ post.id }}"
+                    data-name="heartbeat"
+                ></div>
+                {% endif %}
+            </div>
+            <div class="sprite_bubble_icon"></div>
+            <div class="sprite_share_icon" data-name="share"></div>
+        </div>
+        <div class="right_icon">
+            {% if user in post.bookmark_user_set.all %}
+            <div class="sprite_bookmark_outline on" name="{{ post.id }}" data-name="bookmark"></div>
+            {% else %}
+            <div class="sprite_bookmark_outline" name="{{ post.id }}" data-name="bookmark"></div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="likes m_text">
+        <span id="like-count-{{ post.id }}">{{ post.like_count}} Likes</span>
+        <span id="bookmark-count-{{ post.id }}">{{ post.bookmark_count}} Bookmarks</span>
+    </div>
+
+    <div class="comment_container">
+        <div class="comment" id="comment-list-ajax-post{{post.id}}">
+            {% for comment in post.comment_set.all %}
+            <div class="comment-detail" id="comment{{ comment.id }}">
+                <div class="nick_name m_text">{{ comment.author.profile.nickname}}</div>
+                <div>{{comment.content}}</div>
+                {% if user == comment.author %}
+                <input
+                    type="button"
+                    class="del-comment"
+                    data-name="comment_delete"
+                    value="삭제"
+                    name="{{ comment.id }}"
+                />
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="timer">{{ post.updated_at | timesince}} ago</div>
+
+    <div class="comment_field" id="add-comment-post{{ post.id }}">
+        {% if user.is_authenticated %} {{ comment_form }}
+        <div class="upload_btn m_text" name="{{post.id}}" data-name="comment">Post</div>
+        {% else %} {{ comment_form }}
+        <div
+            class="upload_btn m_text"
+            name="{{post.id}}"
+            data-name="comment"
+            onclick="alert('You need to log in to leave a comment.')"
+        >
+            Post
+        </div>
+        {% endif %}
+    </div>
+</article>
+
+{% endfor %}

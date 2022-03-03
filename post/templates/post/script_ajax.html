@@ -1,6 +1,9 @@
 <script type="text/javascript">
 (function(){
     const delegation = document.querySelector('.contents_box');
+    const side_box = document.querySelector('.side_box');
+    const header = document.querySelector('#header');
+    
     function delegationFunc(e){
         let elem = e.target;
         console.log(elem);
@@ -120,10 +123,86 @@
                 },
                 error: function(request, status, error){
                     alert("code:"+request.status+"\nMessage:"+request.responseText+"\nError:"+error);
+                }
             })
         }
         elem.classList.toggle('on');
-    }    
+    }
+    
+    function resizefunc(){
+       if(pageYOffset >= 10){
+           let calcWidth = (window.innerWidth * 0.5) + 167;
+           if(side_box){
+               side_box.style.left = calcWidth + "px";
+           }
+       } 
+    }
+    
+    function scrollfunc(){
+        let scrollHeight = pageYOffset + window.innerHeight;
+        let documentHeight = document.body.scrollHeight;
+        
+        if (pageYOffset >= 10){
+            header.classList.add('on');
+            resizefunc();
+            if(side_box){
+                side_box.classList.add('on');
+            }
+        }
+        else {
+            header.classList.remove('on');
+            if(side_box){
+                side_box.classList.remove('on');
+                side_box.removeAttribute('style');
+            }
+        }
+        
+        if (scrollHeight >= documentHeight){
+            let page = document.querySelector('#page').value;
+            let end_page = {{ posts.paginator.num_pages }} // refers views.py 
+        
+            if (page > end_page){
+                return;
+            }
+        
+            document.querySelector('#page').value = parseInt(page) + 1;
+            callMorePostAjax(page);
+        }
+    }
+ 
+    function callMorePostAjax(page){
+        let end_page = {{ posts.paginator.num_pages }};
+    
+        if (page> end_page){
+            return;
+        }
+        $.ajax({
+            type: 'POST',
+            url: "{% url 'post:post_list' %}",
+            data: {
+                'page': page,
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+            },
+            dataType: 'html',
+            success: addMorePostAjax,
+            error: function(request, status, error){
+                alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+            }
+        });
+    }
+    
+    function addMorePostAjax(data, textStatus, jqXHR){
+        let post = document.querySelector('#post_list_ajax');
+        post.insertAdjacentHTML("beforeend", data);
+    }
+    
+    // when there is change in the size of view, 
+    window.addEventListener('resize', resizefunc);
+    
+    // when scrolled, 
+    window.addEventListener('scroll', scrollfunc);
+    
+    
     delegation.addEventListener('click', delegationFunc);
     
 })();

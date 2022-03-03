@@ -5,6 +5,40 @@
 {% endblock %}
 
 {% block content %}
+
+<!-- Hidden -->
+{% if user.profile.get_following %}
+<div class="hidden_menu">
+    <div class="scroll_inner">
+        {% for following in user.profile.get_following %}
+            <div class="user">
+                <div class="thumb_img">
+                    {% if following.picture %}
+                        <img src="{{ following.picture.url }}" alt="Profile picture of {{ following.nickname }}">
+                    {% else %}
+                        <img src="{% static 'imgs/thumb.jpeg' %}" alt="Profile picture of {{ following.nickname }}">
+                    {% endif %}
+                </div>
+                <div class="id">{{ following.nickname }}</div>
+            </div>
+            {% endfor %}
+    </div>
+</div>
+
+{% else %}
+
+<div class="hidden_menu">
+    <div class="scroll_inner">
+        <div class="notic">
+            You have not followed anyone. Please follow.
+        </div>
+    </div>
+</div>
+
+{% endif %}
+
+
+
     <section id="main_container">
         <div class="inner">
           <div class="contents_box">
@@ -118,12 +152,14 @@
                   {% endif %}
               </div>
             </article>
-              {% endfor %}
-          </div>
-
-          <input type="hidden" id="page" value="1">
-
-          <div class="side_box">
+            {% endfor %}
+            <div id="post_list_ajax"></div>
+            <input type="hidden" id="page" value="2">
+        </div>
+        
+            
+            
+            <div class="side_box">
             <div class="user_profile">
               <div class="profile_thumb">
                   {% if user_profile and user_profile.picture %}
@@ -147,18 +183,20 @@
               </header>
 
               <div class="scroll_inner">
-                <div class="thumb_user">
-                  <!--repeat the section marked with ** -->
-                  <div class="profile_thumb">
-                    <img src="instaclone/instaclone/config/static/imgs/thumb02.jpg" alt="profile_picture">
-                  </div>
+                {% if following_post_list %}
+                  {% for post in following_post_list %}
+                      <div class="thumb_user">
+                          <div class="profile_thumb">
+                            <img src="{{ post.photo.url }}" alt="profile_picture">
+                          </div>
 
-                  <div class="detail">
-                    <div class="id">AmCass</div>
-                    <div class="time">2 hours ago</div>
-                  </div>
-                  <!--**-->
-                </div>
+                          <div class="detail">
+                            <div class="id">{{ post.content }}</div>
+                            <div class="time">{{ post.updated_at | timesince }}</div>
+                          </div>
+                        </div>
+                  {% endfor %}
+                  {% endif %}
               </div>
             </article>
 
@@ -167,15 +205,19 @@
                 <div>Suggestions For You</div>
                 <div class="more">See All</div>
             </header>
+                
+            {% for post in posts|slice:"2:3" %}    
             <div class="thumb_user">
                 <div class="profile_thumb">
-                    <img src="imgs/thumb02.jpg" alt="profile_picture">
+                    <img src="{{ post.photo.url }}" alt="profile_picture">
                 </div>
                 <div class="detail">
-                    <div class="id">NJ2753</div>
-                    <div class="time">1 hour ago</div>
+                    <div class="id">{{ post.content }}</div>
+                    <div class="time">{{ post.updated_at | timesince }}</div>
                 </div>
             </div>
+                
+            {% endfor %}
         </article>
     </div>
 </div>
