@@ -18,9 +18,10 @@ def post_list(request, tag=None):
     paginator = Paginator(post_list, 3)
     page_num = request.POST.get('page')
     
+    
     try:
         posts = paginator.page(page_num)
-    except PageNotAnInteger: # if page parameter is not an integer:
+    except PageNotAnInteger:
         posts = paginator.page(1)
     except EmptyPage:
         posts = paginator.page(paginator.num_pages)
