@@ -137,6 +137,29 @@
            }
        } 
     }
+
+    function callMorePostAjax(page){
+        let end_page = {{ posts.paginator.num_pages }};
+    
+        if (page > end_page){
+            return;
+        }
+    
+        $.ajax({
+            type: 'POST',
+            url: "{% url 'post:post_list' %}",
+            data: {
+                'page': page,
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+            },
+            dataType: 'html',
+            success: addMorePostAjax,
+            error: function(request, status, error){
+                alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+            }
+        });
+    }
+        
     
     function scrollfunc(){
         let scrollHeight = pageYOffset + window.innerHeight;
@@ -159,7 +182,11 @@
         
         if (scrollHeight >= documentHeight){
             let page = document.querySelector('#page').value;
+            console.log("page in script_ajax line 162: ");
+            console.log(page);
             let end_page = {{ posts.paginator.num_pages }} // refers views.py 
+            console.log("end_page in script_ajax line 165: ");
+            console.log(end_page);
         
             if (page > end_page){
                 return;
@@ -170,27 +197,7 @@
         }
     }
  
-    function callMorePostAjax(page){
-        let end_page = {{ posts.paginator.num_pages }};
-    
-        if (page> end_page){
-            return;
-        }
-        $.ajax({
-            type: 'POST',
-            url: "{% url 'post:post_list' %}",
-            data: {
-                'page': page,
-                'csrfmiddlewaretoken': '{{ csrf_token }}'
-            },
-            dataType: 'html',
-            success: addMorePostAjax,
-            error: function(request, status, error){
-                alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-            }
-        });
-    }
-    
+
     function addMorePostAjax(data, textStatus, jqXHR){
         let post = document.querySelector('#post_list_ajax');
         post.insertAdjacentHTML("beforeend", data);

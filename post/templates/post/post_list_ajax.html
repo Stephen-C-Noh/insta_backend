@@ -1,4 +1,5 @@
 {% load static %} 
+{% load post_extras %}
 
 {% for post in posts %}
 <article class="contents">
@@ -106,7 +107,7 @@
         <span id="like-count-{{ post.id }}">{{ post.like_count}} Likes</span>
         <span id="bookmark-count-{{ post.id }}">{{ post.bookmark_count}} Bookmarks</span>
     </div>
-
+    <div class="content">{{ post|add_link|safe|linebreaksbr }}</div>
     <div class="comment_container">
         <div class="comment" id="comment-list-ajax-post{{post.id}}">
             {% for comment in post.comment_set.all %}

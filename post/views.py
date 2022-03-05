@@ -1,23 +1,26 @@
+import json
+from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
-from .models import Post, Comment, Like
-from .forms import PostForm
-from django.contrib import messages
-import json
-from django.views.decorators.http import require_POST
 from django.http import HttpResponse
-from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.views.decorators.http import require_POST
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage, InvalidPage
+from django.db.models import Count
 from .forms import PostForm, CommentForm
+from .models import Post, Comment, Like, Tag
 
 
 # Create your views here.
 def post_list(request, tag=None):
-    posts = Post.objects.all()
+    if tag:
+        post_list = Post.objects.filter(tag_set__name__iexact=tag).prefetch_related('tag_set', 'like_user_set__profile', 'comment_set__author__profile', 'author__profile__follower_user', 'author__profile__follower_user__from_user').select_related('author__profile')
+    else:
+        post_list = Post.objects.all().prefetch_related('tag_set', 'like_user_set__profile', 'comment_set__author__profile', 'author__profile__follower_user', 'author__profile__follower_user__from_user').select_related('author__profile')
+    
     comment_form = CommentForm()
     paginator = Paginator(post_list, 3)
     page_num = request.POST.get('page')
-    
     
     try:
         posts = paginator.page(page_num)
@@ -25,6 +28,8 @@ def post_list(request, tag=None):
         posts = paginator.page(1)
     except EmptyPage:
         posts = paginator.page(paginator.num_pages)
+    except InvalidPage:
+        posts = paginator.page(1)
     
     if request.is_ajax():
         return render(request, 'post/post_list_ajax.html',{
@@ -60,7 +65,7 @@ def post_new(request):
             post = form.save(commit=False)
             post.author = request.user
             post.save()
-            #post.tag_save()
+            post.tag_save()
             messages.info(request, 'New Post Uploaded.')
             return redirect('post:post_list')
     else:
