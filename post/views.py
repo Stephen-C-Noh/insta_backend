@@ -86,8 +86,8 @@ def post_edit(request, pk):
         form = PostForm(request.POST, request.FILES, instance=post)
         if form.is_valid():
             post = form.save()
-            #post.tag_set.clear()
-            #post.tag_save()
+            post.tag_set.clear()
+            post.tag_save()
             messages.success(request, 'Edited.')
             return redirect('post/post_list')
     else:
