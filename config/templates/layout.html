@@ -55,30 +55,28 @@
                 </h1>
                 
                 <div class="search_field">
-                    <input type="text" placeholder="Search" tabindex="0">
-                    <div class="fake_field">
-                        <span class="sprite_small_search_icon"></span>
-                        <span>Search</span>
-                    </div>
+                    <form class="search-form" action="{% url 'post:post_list' %}" method="post">
+                        {% csrf_token %}
+                        <input class="tag-search" type="text" name="tag" placeholder="Search Tags" pattern="#?[\wㄱ-ㅎ|ㅏ-ㅣ|가-힣]+" title="Special Charactors and blanks are not allowed" required >
+                        <div class="fake_field">
+                            <span class="sprite_small_search_icon"></span>
+                            <span>Search Tags</span>
+                        </div>
+                    </form>
                 </div>
+
                 <div class="right_icons">
-                    <div class="sprite_camera_icon">
-                        <a href="#"></a>
-                    </div>
+                    <div class="sprite_camera_icon"><a href="{% url 'post:post_new' %}"></a></div>
                     <div class="sprite_compass_icon"><a href="#"></a></div>
                     <div class="sprite_heart_icon_outline"><a href="#"></a></div>
                     
                     {% if user.is_authenticated %}
                     
-                    <div class="sprite_user_icon_outline">
-                        <a href="#"></a>
-                    </div>
+                    <div class="sprite_user_icon_outline"><a href="#"></a></div>
                     
                     {% else %}
                     
-                    <div class="sprite_user_icon_outline">
-                        <a href="{% url 'accounts:login' %}"></a>
-                    </div>
+                    <div class="sprite_user_icon_outline"><a href="{% url 'accounts:login' %}"></a></div>
                     
                     {% endif %}
                 </div>

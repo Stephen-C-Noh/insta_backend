@@ -21,6 +21,9 @@ def post_list(request, tag=None):
     comment_form = CommentForm()
     paginator = Paginator(post_list, 3)
     page_num = request.POST.get('page')
+
+    # for post in post_list:
+    #     post.tag_save()
     
     try:
         posts = paginator.page(page_num)
@@ -36,7 +39,13 @@ def post_list(request, tag=None):
             'posts': posts,
             'comment_form': comment_form,
         })
-    
+
+    if request.method == 'POST':
+        tag = request.POST.get('tag')
+        tag_clean = ''.join(e for e in tag if e.isalum())
+        return redirect('post:post_search', tag_clean)
+
+
     if request.user.is_authenticated:
         username = request.user
         user = get_object_or_404(get_user_model(), username=username)
@@ -174,7 +183,7 @@ def comment_new_detail(request):
             comment.post = post
             comment.save()
             return render(request, 'post/comment_new_ajax.html', {'comment': comment,})
-    return redirect("post:post_list")
+
 
 
 
@@ -194,4 +203,26 @@ def comment_delete(request):
     return HttpResponse(json.dumps({'message': message, 'status': status, }), content_type="application/json")
 
 
-    
+def post_detail(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    comment_form = CommentForm()
+
+    return render(request, 'post/post_detail.html', {
+        'comment_form': comment_form,
+        'post': post,
+    })
+
+@login_required
+def comment_new_detail(request):
+    pk = request.POST.get('pk')
+    post = get_object_or_404(Post, pk=pk)
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.author = request.user
+            comment.post = post
+            comment.save()
+            return render(request, 'post/comment_new_detail_ajax.html',{
+                'comment': comment,
+            })

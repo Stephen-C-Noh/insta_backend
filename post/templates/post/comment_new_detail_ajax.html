@@ -1,0 +1,18 @@
+<div class="user_container-detail" id="comment{{ comment.id }}">
+    {% if comment.author.profile.picture %}
+        <div class="user"><img src="{{ comment.author.profile.picture.url }}" alt="user"></div>
+    {% else %}
+        <div class="user"><img src="{% static 'imgs/thumb.jpeg' %}" alt="user"></div>
+    {% endif %}
+
+    <div class="comment">
+        <span class="user_id">{{ comment.author.profile.nickname }}</span>
+        <span>{{ comment.content }}</span>
+        <span>
+            {% if user == comment.author %}
+                <input type="button" class="del-comment" data-name="comment_delete" value="Delete" name="{{ comment.id }}">
+            {% endif %}
+        </span>
+        <div class="time">{{ comment.created_at|timesince }}</div>
+    </div>
+</div>

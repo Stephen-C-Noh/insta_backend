@@ -81,8 +81,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'instaclone',
-        'USER': 'stephen',
-        'PASSWORD': 'shdwkd123',
+        'USER': 'admin',
+        'PASSWORD': 'admin123',
         'HOST': 'localhost',
         'PORT': '',
     }
