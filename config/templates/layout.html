@@ -72,7 +72,7 @@
                     
                     {% if user.is_authenticated %}
                     
-                    <div class="sprite_user_icon_outline"><a href="#"></a></div>
+                    <div class="sprite_user_icon_outline"><a href={% url 'post:my_post_list' user.username %} ></a></div>
                     
                     {% else %}
                     

@@ -12,6 +12,25 @@ from .models import Post, Comment, Like, Tag
 
 
 # Create your views here.
+def my_post_list(request, username):
+    user = get_object_or_404(get_user_model(), username=username)
+    user_profile = user.profile
+    target_user = get_user_model().objects.filter(id=user.id)\
+        .select_related('profile')\
+        .prefetch_related('profile__follower_user__from_user', 'profile__follow_user__to_user')
+
+    post_list = user.post_set.all()
+    all_post_list = Post.objects.all()
+
+    return render(request, 'post/my_post_list.html',{
+        'user_profile': user_profile,
+        'target_user': target_user,
+        'post_list': post_list,
+        'all_post_list': all_post_list,
+        'username': username,
+    })
+
+
 def post_list(request, tag=None):
     if tag:
         post_list = Post.objects.filter(tag_set__name__iexact=tag).prefetch_related('tag_set', 'like_user_set__profile', 'comment_set__author__profile', 'author__profile__follower_user', 'author__profile__follower_user__from_user').select_related('author__profile')
