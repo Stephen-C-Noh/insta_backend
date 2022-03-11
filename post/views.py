@@ -185,8 +185,6 @@ def comment_new_detail(request):
             return render(request, 'post/comment_new_ajax.html', {'comment': comment,})
 
 
-
-
 @login_required
 def comment_delete(request):
     pk = request.POST.get('pk')

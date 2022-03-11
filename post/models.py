@@ -164,9 +164,6 @@ class Post(models.Model):
     @property
     def bookmark_count(self):
         return self.bookmark_user_set.count()
-    
-    
-    
 
     def __str__(self):
         return self.content
@@ -189,7 +186,8 @@ class Like(models.Model):
         unique_together = (
             ('user', 'post')
         )
-        
+
+
 class Bookmark(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
@@ -201,7 +199,6 @@ class Bookmark(models.Model):
             ('user', 'post')
         )
         
-
 
 class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)

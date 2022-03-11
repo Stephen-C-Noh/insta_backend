@@ -57,7 +57,7 @@
                 <div class="search_field">
                     <form class="search-form" action="{% url 'post:post_list' %}" method="post">
                         {% csrf_token %}
-                        <input class="tag-search" type="text" name="tag" placeholder="Search Tags" pattern="#?[\wㄱ-ㅎ|ㅏ-ㅣ|가-힣]+" title="Special Charactors and blanks are not allowed" required >
+                        <input class="tag-search" type="text" name="tag" placeholder="Search Tags" pattern="#?[\wㄱ-ㅎ|ㅏ-ㅣ|가-힣]+" title="Special Characters and blanks are not allowed" required >
                         <div class="fake_field">
                             <span class="sprite_small_search_icon"></span>
                             <span>Search Tags</span>
@@ -89,7 +89,7 @@
     </section>
 
     <!-- jQuery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     
     {% block js %}
     {% endblock %}

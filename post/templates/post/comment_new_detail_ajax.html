@@ -1,8 +1,9 @@
+{% load static %}
 <div class="user_container-detail" id="comment{{ comment.id }}">
     {% if comment.author.profile.picture %}
         <div class="user"><img src="{{ comment.author.profile.picture.url }}" alt="user"></div>
     {% else %}
-        <div class="user"><img src="{% static 'imgs/thumb.jpeg' %}" alt="user"></div>
+        <div class="user"><img src="{% static 'imgs/thumb.jpeg' %}" alt=""></div>
     {% endif %}
 
     <div class="comment">

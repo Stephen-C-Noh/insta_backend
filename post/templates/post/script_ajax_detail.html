@@ -97,7 +97,7 @@
                     success: function(data, textStatus, jqXHR){
                         document.querySelector("#comment-list-ajax-post"+pk).insertAdjacentHTML("afterbegin", data);
                     },
-                    error: function(reqeust, status, error){
+                    error: function(request, status, error){
                         alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
                     },
                 });
@@ -118,7 +118,7 @@
                         }
 
                     },
-                    error: function(reqeust, status, error){
+                    error: function(request, status, error){
                         alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
                     },
                 })
