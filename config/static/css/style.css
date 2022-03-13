@@ -197,6 +197,10 @@ body{
     position: relative;
 }
 
+.contents .sprite_small_more_icon{
+    position: relative;
+}
+
 .contents .toggle_box{
     text-align: center;
     position: absolute;
@@ -208,6 +212,10 @@ body{
 }
 
 .contents .sprite_more_icon.on .toggle_box{
+    display: block;
+}
+
+.contents .sprite_small_more_icon .on .toggle_box{
     display: block;
 }
 
@@ -241,6 +249,10 @@ body{
     display: flex;
 }
 
+.contents .bottom_icons .left_icons > a{
+    margin-right: 10px;
+}
+
 .contents .bottom_icons .left_icons > div{
     margin-right: 10px;
     cursor:pointer;
@@ -260,6 +272,9 @@ body{
     color:#262626;
 }
 
+.contents .content{
+    margin-left: 20px;
+}
 
 .contents .comment_container{
     display:flex;

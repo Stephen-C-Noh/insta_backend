@@ -69,11 +69,14 @@
                                     <div class="comment">
                                         <span class="user_id">{{ comment.author.profile.nickname }}</span>
                                         <span>{{ comment.content }}</span>
-                                        <span>
-                                            {% if user == comment.author %}
-                                                <input type="button" class="del-comment" data-name="comment_delete" value="Delete" name="{{ comment.id }}">
-                                            {% endif %}
-                                        </span>
+                                        <div class="sprite_small_more_icon" data-name="more">
+                                            <ul class="more_detail">
+                                                <li>
+{#                                                    <input type="button" class="del-comment" data-name="comment_delete" value="Delete" name="{{ comment.id }}">#}
+                                                </li>
+                                            </ul>
+                                        </div>
+
                                         <div class="time">{{ comment.created_at|timesince }}</div>
                                     </div>
                                 </div>

@@ -51,6 +51,12 @@ body {
     height: 3px;
 }
 
+.sprite_small_more_icon {
+	background: url('../imgs/background02.png') no-repeat -347px -405px;
+	width: 14px;
+	height: 4px;
+}
+
 .sprite_bubble_icon {
     display: inline-block;
     background: url('../imgs/background01.png') no-repeat -239px -202px;

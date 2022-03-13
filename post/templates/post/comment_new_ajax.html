@@ -2,6 +2,13 @@
     <div class="nick_name m_text">{{ comment.author.profile.nickname }}</div>
     <div>{{ comment.content }}</div>    
     {% if user == comment.author %}
-    <input type="button" class="del-comment" data-name="comment_delete" value="Delete" name="{{ comment.id }}">
+    <div class="sprite_small_more_icon" data-name="more">
+        <ul class="more_detail">
+            <li>
+                <input type="button" class="del-comment" data-name="comment_delete" value="Delete" name="{{ comment.id }}">
+            </li>
+        </ul>
+    </div>
+{#    <input type="button" class="del-comment" data-name="comment_delete" value="Delete" name="{{ comment.id }}">#}
     {% endif %}
 </div>

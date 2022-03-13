@@ -62,12 +62,12 @@
                     <div class="nick_name m_text">{{ post.author.profile.nickname }} {{ post.id }}</div>
                     <div class="country s_text">Toronto, Ontario</div>
                   </div>
-                    <div>
-                        <form action="{% url 'post:post_delete' post.pk %}" method="post">
-                            {% csrf_token %}
-                            <input type="submit" value="Delete">
-                        </form>
-                    </div>
+{#                    <div>#}
+{#                        <form action="{% url 'post:post_delete' post.pk %}" method="post">#}
+{#                            {% csrf_token %}#}
+{#                            <input type="submit" value="Delete">#}
+{#                        </form>#}
+{#                    </div>#}
                 </div>
                 <div class="sprite_more_icon" data-name="more">
                   <ul class='toggle_box'>
